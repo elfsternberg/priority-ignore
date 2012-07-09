@@ -1,4 +1,8 @@
-require ['jquery', 'priority_tmpl'], ($, priority_template, new_priority_template, help_template) ->
+require.config
+    paths:
+        'jquery': 'libs/jquery-1.7.2'
+
+require ['jquery', 'priority_tmpl'], ($, priority_template) ->
 
     class Prioritize
 

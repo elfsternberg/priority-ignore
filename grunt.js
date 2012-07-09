@@ -71,11 +71,11 @@ module.exports = function(grunt) {
             }
         },
         requirejs: {
-            dir: 'dist',
-            appDir: 'src',
+            dir: 'dist-compiled',
+            appDir: 'dist',
             baseUrl: '.',
             paths: {
-                jquery    : './libs/jquery',
+                jquery    : '../libs/jquery/jquery-1.7.2',
             },
             pragmas: {
                 doExclude: true
@@ -123,8 +123,9 @@ module.exports = function(grunt) {
     });
 
     grunt.registerHelper('templatize', function(src, dest, done) {
-        var file = grunt.file.read(src);
-        console.log('define(' + _und.template(file).source + ');');
+        var file = grunt.file.read(src),
+            out = path.basename(src, '.html');
+        grunt.file.write(path.join(dest, out + '.js'), 'define(' + _und.template(file).source + ');')
         done();
     });
 
