@@ -9,6 +9,7 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-coffee');
     grunt.loadNpmTasks('grunt-recess');
+    grunt.loadNpmTasks('grunt-requirejs');
     
     // Project configuration.
     grunt.initConfig({
@@ -68,6 +69,21 @@ module.exports = function(grunt) {
             globals: {
                 jQuery: true
             }
+        },
+        requirejs: {
+            dir: 'dist',
+            appDir: 'src',
+            baseUrl: '.',
+            paths: {
+                jquery    : './libs/jquery',
+            },
+            pragmas: {
+                doExclude: true
+            },
+            modules: [{name: 'priority'}],
+            skipModuleInsertion: false,
+            optimizeAllPluginResources: true,
+            findNestedDependencies: true
         },
         recess: {
             dev: {
