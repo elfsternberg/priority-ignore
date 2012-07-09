@@ -1,0 +1,29 @@
+{
+  "name": "PriorityIgnore",
+  "title": "Priorityignore",
+  "description": "A simple program to show/hide priorities.",
+  "version": "0.1.0",
+  "homepage": "",
+  "author": {
+    "name": "Elf M. Sternberg",
+    "email": "elf.sternberg@gmail.com",
+    "url": "http://elfsternberg.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://jenkins@wish/home/jenkins/repos/priority.git"
+  },
+  "bugs": {
+    "url": ""
+  },
+  "licenses": [
+    {
+      "type": "CC-Attribution-NonCommercial-ShareAlike",
+      "url": "/blob/master/LICENSE-CC-Attribution-NonCommercial-ShareAlike"
+    }
+  ],
+  "dependencies": {
+    "jquery": ">= 1.6"
+  },
+  "keywords": []
+}
