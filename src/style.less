@@ -1,0 +1,242 @@
+/* -*- mode:css -*- */
+
+* {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font: 13pt/190% Calibri,Georgia,"Lucida Bright",Lucidabright,"Bitstream Vera Serif",serif;
+    background-color: #fff;
+}
+
+body { 
+    margin: .25in .75in .25in 1.5in;
+}
+.clearoncolumn {
+    clear: none;
+}
+
+@media only screen and (min-width: 480px) {
+    body { 
+        margin: .25in .75in .25in 1.5in;
+    }
+    .clearoncolumn {
+        clear: none;
+    }
+}
+
+@media only screen and (max-width: 479px) {
+    body { 
+        margin: 2% 2%  0 6%;
+    }
+    .clearoncolumn {
+        clear: both;
+    }
+}
+
+p,li,ul {
+    color: #333333;
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    padding-bottom: 1em;
+}
+
+ul {
+    margin-left: 4%;
+}
+
+ul + p {
+    margin-top: 1em;
+}
+
+#content {
+    max-width: 732px;
+}
+
+#braindiv {
+    #msg {
+        font-size: 24px;
+        color: #999;
+        
+        p {
+            width: 7em;
+            font-size: 20px;
+            margin: -3px 0 -8px 0; 
+            padding: 0 0 0 0;
+            .doing {
+                color: #c00;
+            }
+        }
+    }
+}
+
+#braindiv {
+    float: left;
+    width: 45%;
+    padding-right: 5%;
+    
+    #img {
+        width: 164px;
+        height: 226px;
+        background: url(brain-in-a-jar.jpg) top right no-repeat;
+        padding: 0 0 1em 0;
+    }
+}
+
+@media only screen and (min-width: 480px) {
+    #braindiv {
+        float: left;
+        width: 45%;
+        padding-right: 5%;
+        
+        #img {
+            width: 164px;
+            height: 226px;
+            background: url(brain-in-a-jar.jpg) top right no-repeat;
+            padding: 0 0 1em 0;
+        }
+    }
+}
+
+
+@media only screen and (max-width: 479px) {
+    #braindiv {
+        width: 100%;
+        
+        #img {
+            float: left;
+            width: 37.5%;
+            min-width: 122px;
+            height: 165px;
+            background: url(brain-in-a-jar-sm.jpg) top right no-repeat;
+            padding: 0 0 1em 0;
+        }
+        
+        #msg {
+            float: right;
+            width: 60.353125%;
+        }
+        padding-bottom: 2em;
+    }
+}
+
+        
+        
+#rightnow {
+    float: left;
+    width: 49.9%;
+
+    h1 {
+        display: block;
+        float: left;
+        padding-bottom: 0;
+        border: none;
+        color: #333;
+        font-size: 20px; 
+        font-weight: normal;
+        line-height: 1.2;
+        strong {
+            font-weight: bold;
+        }
+    }
+
+    ul {
+        margin-top: 20px;
+        font-size: 20px;
+        margin-left: 12%;
+        li {
+            .catcontainer {
+                display: inline-block;
+                .category {
+                    display: inline-block;
+                }
+            }
+
+            ul {
+                margin-top: 5px;
+                font-size: 17px;
+            }
+        }
+    }
+}
+
+.fadebutton, .addstory, .addcat, .editcat {
+    cursor: pointer;
+    display: block;
+    float: right;
+    background-color: #ff9f00;
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(255,255,255,.3) 8px, rgba(255,255,255,.3) 16px); 
+    background-image: -webkit-repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(255,255,255,.3) 8px, rgba(255,255,255,.3) 16px);
+    font-weight: bold;
+    padding: 2px 6px 3px 6px;
+    color: #111;
+    -webkit-border-radius: 20px;  
+    -moz-border-radius: 20px;  
+    border-radius: 20px;  
+    margin-left: 10px;
+}
+
+#newcat h1, div.category, .editcat, .addstory, li.task {
+    cursor: pointer;
+}
+
+
+.edit-category, .edit-task {
+    padding: 4px 2px 0px 5px;  
+    text-shadow: 0px 1px 0px #fff;  
+    -webkit-border-radius: 20px;  
+    -moz-border-radius: 20px;  
+    border-radius: 20px;  
+    border: 1px solid #ddd;
+
+    -webkit-box-shadow: 2px 1px 0px #efefef;  
+    -moz-box-shadow: 2px 1px 0px #efefef;  
+    box-shadow:  2px 1px 0px #efefef;  
+
+    width: 80%;
+    input.edit-task-field {
+        width: 80%;
+        border: 1px solid #eee;
+        padding-bottom: 0;
+        margin-bottom: 0;
+        margin-left: 5px;
+        -webkit-border-radius: 20px;  
+        -moz-border-radius: 20px;  
+        border-radius: 20px;  
+    }   
+
+    button.delete-task-field {
+        margin-top: 4px;
+        padding: 1px 4px 3px 3px;
+        font-weight: bold;
+        display: block;
+        float: right;
+        margin-right: 10px;
+        background-color: #ff9f00;
+        color: #333;
+        -webkit-border-radius: 20px;  
+        -moz-border-radius: 20px;  
+        border-radius: 20px;  
+    }   
+}
+
+#message {
+    font-family: Constantina,Georgia,"Lucida Bright",Lucidabright,"Bitstream Vera Serif",serif;
+    display: block;
+    position:absolute;
+    top: 1.0416666%;
+    right: 1.0416666%;
+    width: 35.0416666%;
+    max-width: 32em;
+    padding: 1.0416666%;
+    background:#eee;
+    border:1px solid #ddd;
+    -webkit-border-radius: 20px;  
+    -moz-border-radius: 20px;  
+    border-radius: 20px;  
+}

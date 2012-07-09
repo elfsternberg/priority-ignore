@@ -1,4 +1,4 @@
-require ['jquery', 'priority_tmpl'], ($, priority_template, new_priority_template, help_template, ) ->
+require ['jquery', 'priority_tmpl'], ($, priority_template, new_priority_template, help_template) ->
 
     class Prioritize
 
@@ -26,7 +26,7 @@ require ['jquery', 'priority_tmpl'], ($, priority_template, new_priority_templat
     $ ->
         prioritize = new Lawnchair {name: 'Prioritize'}, ->
             p = this
-            p.save [
+            p.save
                 key: 'priorities',
                 priorities: [
                     {cat: 'priority', name: 'Omaha, Stormy, Raeney'}
@@ -40,5 +40,5 @@ require ['jquery', 'priority_tmpl'], ($, priority_template, new_priority_templat
                     {cat: 'ignore', name: 'Religious Arguments'}
                     {cat: 'ignore', name: 'PASWO'}
                     {cat: 'ignore', name: 'Twitter'}
-            ], ->
+                ], ->
                 handler = new Prioritize(p)

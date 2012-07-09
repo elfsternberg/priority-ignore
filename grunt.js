@@ -4,7 +4,11 @@
 path = require('path');
 _und = require('underscore');
 
+
 module.exports = function(grunt) {
+
+    grunt.loadNpmTasks('grunt-coffee');
+    grunt.loadNpmTasks('grunt-recess');
     
     // Project configuration.
     grunt.initConfig({
@@ -15,18 +19,6 @@ module.exports = function(grunt) {
                 '<%= pkg.homepage ? "* " + pkg.homepage + "\n" : "" %>' +
                 '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
                 ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */'
-        },
-        concat: {
-            dist: {
-                src: ['<banner:meta.banner>', '<file_strip_banner:src/<%= pkg.name %>.js>'],
-                dest: 'dist/<%= pkg.name %>.js'
-            }
-        },
-        min: {
-            dist: {
-                src: ['<banner:meta.banner>', '<config:concat.dist.dest>'],
-                dest: 'dist/<%= pkg.name %>.min.js'
-            }
         },
         qunit: {
             files: ['test/**/*.html']
@@ -47,8 +39,17 @@ module.exports = function(grunt) {
             dest: './src/'
         },
         templatize: {
-            src: ['src/**/*.html'],
+            src: ['src/**/*_tmpl.html'],
             dest: './src'
+        },
+        coffee: {
+            dev: {
+                src: ['src/**/*.coffee'],
+                dest: 'src',
+                options: {
+                    bare: false
+                }
+            }
         },
         jshint: {
             options: {
@@ -66,6 +67,15 @@ module.exports = function(grunt) {
             },
             globals: {
                 jQuery: true
+            }
+        },
+        recess: {
+            dev: {
+                src: ['src/style.less'],
+                dest: 'src/style.css',
+                options: { 
+                    compile: true
+                }
             }
         },
         uglify: {}
@@ -106,24 +116,15 @@ module.exports = function(grunt) {
         var done = this.async(),
             sources = grunt.file.expandFiles(grunt.config([this.name, 'src'])),
             dest = grunt.config([this.name, 'dest']);
+        
+        if (sources.length == 0) 
+            return done();
 
         sources.forEach(function(path) {
             grunt.helper('templatize', path, dest, done);
         });
     });
         
-        
-
-//    grunt.registerTask('haml', function() {
-//        outputPath = grunt.config('haml.dest');
-//        files = grunt.file.expandFiles(grunt.config('haml.src')).forEach(function(file) {
-//            grunt.utils.spawn({
-//                cmd: 'haml',
-//                args: ["--unix-newlines", "--no-escape-attrs", "--double-quote-attributes", file]
-//            }, function(err, result) {
-//                console.log("FOO", result);
-//            });
-//        });
-//    });
+    grunt.registerTask('dev', 'coffee:dev recess:dev templatize haml');
 
 };
