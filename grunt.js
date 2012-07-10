@@ -121,8 +121,10 @@ module.exports = function(grunt) {
             args: ["--unix-newlines", "--no-escape-attrs", "--double-quote-attributes", src]
         };
         grunt.utils.spawn(args, function(err, result) { 
+            if (err) console.log(err);
             var out = path.basename(src, '.haml');
             grunt.file.write(path.join(dest, out + '.html'), result.stdout);
+            done();
         });
     });
     
@@ -132,7 +134,7 @@ module.exports = function(grunt) {
             dest = grunt.config([this.name, 'dest']);
 
         async.forEachSeries(sources, 
-            function(path, cb) { grunt.helper('haml', path, dest, done); cb(); },
+            function(path, cb) { grunt.helper('haml', path, dest, cb) },
             done);
     });
 
