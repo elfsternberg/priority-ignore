@@ -1,9 +1,11 @@
 /* mode:javascript; tab-width:2; indent-tabs-mode:nil; */
 /*global module:false*/
 
+var path, _und, async;
+
 path = require('path');
 _und = require('underscore');
-
+async = require('async');
 
 module.exports = function(grunt) {
 
@@ -37,7 +39,7 @@ module.exports = function(grunt) {
         },
         haml: {
             src: ['src/**/*.haml'],
-            dest: './src/'
+            dest: './src'
         },
         templatize: {
             src: ['src/**/*_tmpl.html'],
@@ -75,7 +77,7 @@ module.exports = function(grunt) {
             appDir: 'dist',
             baseUrl: '.',
             paths: {
-                jquery    : '../libs/jquery/jquery-1.7.2',
+                jquery    : '../libs/jquery/jquery-1.7.2'
             },
             pragmas: {
                 doExclude: true
@@ -85,6 +87,16 @@ module.exports = function(grunt) {
             optimizeAllPluginResources: true,
             findNestedDependencies: true
         },
+        install: {
+            src: [
+                'src/index.html',
+                'src/priority.js',
+                'src/*_tmpl.js', 
+                'src/style.css', 
+                'libs/jquery/jquery-1.7.2.js', 
+                'libs/require.js' ],
+            dest: 'dist'
+        },
         recess: {
             dev: {
                 src: ['src/style.less'],
@@ -93,6 +105,9 @@ module.exports = function(grunt) {
                     compile: true
                 }
             }
+        },
+        mocha: {
+            src: ['test/*_mocha.coffee']
         },
         uglify: {}
     });
@@ -104,11 +119,10 @@ module.exports = function(grunt) {
         var args = {
             cmd: 'haml',
             args: ["--unix-newlines", "--no-escape-attrs", "--double-quote-attributes", src]
-        }
+        };
         grunt.utils.spawn(args, function(err, result) { 
             var out = path.basename(src, '.haml');
-            grunt.file.write(path.join(dest, out + '.html'), result.stdout)
-            done()
+            grunt.file.write(path.join(dest, out + '.html'), result.stdout);
         });
     });
     
@@ -117,31 +131,77 @@ module.exports = function(grunt) {
             sources = grunt.file.expandFiles(grunt.config([this.name, 'src'])),
             dest = grunt.config([this.name, 'dest']);
 
-        sources.forEach(function(path) {
-            grunt.helper('haml', path, dest, done);
-        });
+        async.forEachSeries(sources, 
+            function(path, cb) { grunt.helper('haml', path, dest, done); cb(); },
+            done);
     });
 
     grunt.registerHelper('templatize', function(src, dest, done) {
         var file = grunt.file.read(src),
             out = path.basename(src, '.html');
-        grunt.file.write(path.join(dest, out + '.js'), 'define(' + _und.template(file).source + ');')
-        done();
+        grunt.file.write(path.join(dest, out + '.js'), 'define(' + _und.template(file).source + ');');
+        if (done) {
+            done();
+        }
     });
 
     grunt.registerTask('templatize', 'Compile Underscored HTML to Javascript', function() {
         var done = this.async(),
             sources = grunt.file.expandFiles(grunt.config([this.name, 'src'])),
             dest = grunt.config([this.name, 'dest']);
-        
-        if (sources.length == 0) 
-            return done();
 
-        sources.forEach(function(path) {
-            grunt.helper('templatize', path, dest, done);
+        if (sources.length === 0) {
+            return done();
+        }
+
+        async.forEachSeries(sources, 
+            function(path, cb) { grunt.helper('templatize', path, dest, null); cb(); },
+            done);
+    });
+
+    grunt.registerTask('dev', 'coffee:dev recess:dev templatize haml install');
+
+    grunt.registerHelper('install', function(src, dest, done) {
+        grunt.file.copy(src, path.join(dest, path.basename(src)));
+        if (done) { done(); }
+    });
+
+    grunt.registerTask('install', function() {
+        var sources = grunt.file.expandFiles(grunt.config([this.name, 'src'])),
+            dest = grunt.config([this.name, 'dest']);
+        sources.forEach(function(path) { grunt.helper('install', path, dest, null);});
+    });
+
+    grunt.registerHelper('mocha', function(command, test, done) {
+        var args = {
+            cmd: 'mocha',
+            args: ['--compilers', 'coffee:coffee-script', '-R', 'dot', '-C', test]
+        };
+
+        grunt.utils.spawn(args, function(err, result) {
+            if (err) {
+                console.log(err.stderr)
+                done();
+                return;
+            }
+            console.log(result.stdout);
+            done();
         });
     });
+
+    grunt.registerTask('mocha', 'Run Mocha Tests', function() {
+        var done = this.async(),
+            task = this.name,
+            sources = grunt.file.expandFiles(grunt.config([this.name, 'src'])),
+            dest = grunt.config([this.name, 'dest']);
         
-    grunt.registerTask('dev', 'coffee:dev recess:dev templatize haml');
+        sources.sort();
+        async.forEachSeries(
+            sources, 
+            function(path, cb) { 
+                grunt.helper('mocha', grunt.config([task, 'cmd']), path, cb);
+            },
+            done);
+    });
 
 };

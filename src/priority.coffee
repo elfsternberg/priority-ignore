@@ -1,6 +1,6 @@
 require.config
     paths:
-        'jquery': 'libs/jquery-1.7.2'
+        'jquery': 'jquery-1.7.2'
 
 require ['jquery', 'priority_tmpl'], ($, priority_template) ->
 
