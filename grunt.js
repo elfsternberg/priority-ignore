@@ -6,6 +6,7 @@ var path, _und, async;
 path = require('path');
 _und = require('underscore');
 async = require('async');
+fs = require('fs');
 
 module.exports = function(grunt) {
 
@@ -183,7 +184,7 @@ module.exports = function(grunt) {
                 done();
                 return;
             }
-            console.log(result.stdout);
+            fs.appendFileSync('tmp/results.dot', result.stdout);
             done();
         });
     });
@@ -195,6 +196,8 @@ module.exports = function(grunt) {
             dest = grunt.config([this.name, 'dest']);
         
         sources.sort();
+        grunt.file.mkdir('tmp');
+        fs.writeFileSync('tmp/results.dot', '');
         async.forEachSeries(
             sources, 
             function(path, cb) { 
