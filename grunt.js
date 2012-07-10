@@ -142,9 +142,7 @@ module.exports = function(grunt) {
         var file = grunt.file.read(src),
             out = path.basename(src, '.html');
         grunt.file.write(path.join(dest, out + '.js'), 'define(' + _und.template(file).source + ');');
-        if (done) {
-            done();
-        }
+        done();
     });
 
     grunt.registerTask('templatize', 'Compile Underscored HTML to Javascript', function() {
@@ -155,13 +153,12 @@ module.exports = function(grunt) {
         if (sources.length === 0) {
             return done();
         }
-
         async.forEachSeries(sources, 
-            function(path, cb) { grunt.helper('templatize', path, dest, null); cb(); },
+            function(path, cb) { grunt.helper('templatize', path, dest, cb); },
             done);
     });
 
-    grunt.registerTask('dev', 'coffee:dev recess:dev templatize haml install');
+    grunt.registerTask('dev', 'coffee:dev recess:dev haml templatize install');
 
     grunt.registerHelper('install', function(src, dest, done) {
         grunt.file.copy(src, path.join(dest, path.basename(src)));
