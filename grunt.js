@@ -175,7 +175,7 @@ module.exports = function(grunt) {
     grunt.registerHelper('mocha', function(command, test, done) {
         var args = {
             cmd: 'mocha',
-            args: ['--compilers', 'coffee:coffee-script', '-R', 'tap', '-C', test]
+            args: ['--compilers', 'coffee:coffee-script', '-R', 'xunit', '-C', test]
         };
 
         grunt.utils.spawn(args, function(err, result) {
@@ -184,7 +184,7 @@ module.exports = function(grunt) {
                 done();
                 return;
             }
-            fs.appendFileSync('tmp/results.dot', result.stdout);
+            fs.appendFileSync('tmp/results.xml', result.stdout);
             done();
         });
     });
@@ -197,7 +197,7 @@ module.exports = function(grunt) {
         
         sources.sort();
         grunt.file.mkdir('tmp');
-        fs.writeFileSync('tmp/results.dot', '');
+        fs.writeFileSync('tmp/results.xml', '');
         async.forEachSeries(
             sources, 
             function(path, cb) { 
