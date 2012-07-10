@@ -174,7 +174,7 @@ module.exports = function(grunt) {
     grunt.registerHelper('mocha', function(command, test, done) {
         var args = {
             cmd: 'mocha',
-            args: ['--compilers', 'coffee:coffee-script', '-R', 'dot', '-C', test]
+            args: ['--compilers', 'coffee:coffee-script', '-R', 'tap', '-C', test]
         };
 
         grunt.utils.spawn(args, function(err, result) {
