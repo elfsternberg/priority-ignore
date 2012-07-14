@@ -11,3 +11,4 @@ dist-compiled/*
 src/*.html
 src/*.js
 src/*.css
+tmp/
