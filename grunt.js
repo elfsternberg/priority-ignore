@@ -96,7 +96,7 @@ module.exports = function(grunt) {
       appDir: "dist",
       baseUrl: ".",
       paths: {
-        jquery: "../libs/jquery/jquery-1.7.2"
+        jquery: "../assets/jquery/jquery-1.7.2"
       },
       pragmas: {
         doExclude: true
@@ -111,7 +111,7 @@ module.exports = function(grunt) {
       findNestedDependencies: true
     },
     install: {
-      src: ["libs/jquery/jquery-1.7.2.js", "libs/require.js", "libs/lawnchair/lawnchair.js"],
+      src: ["assets/jquery/jquery-1.7.2.js", "assets/require.js", "assets/lawnchair/lawnchair.js", "assets/images/*.png"],
       dest: "dist"
     },
     mocha: {

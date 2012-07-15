@@ -2,7 +2,7 @@ require.config
     paths:
         'jquery': 'jquery-1.7.2'
 
-require ['jquery', 'priority_tmpl', 'lawnchair'], ($, priority_template) ->
+require ['jquery', 'priority_tmpl', 'edit_priority_tmpl', 'lawnchair'], ($, priority_template, edit_priority_template) ->
 
     class Prioritize
 
@@ -12,45 +12,68 @@ require ['jquery', 'priority_tmpl', 'lawnchair'], ($, priority_template) ->
             @render()
 
             $('body').on 'click', @render
-            $('#prioritize').on 'click', (ev) => @editPriority(ev, 'priority')
-            $('#ignorize').on 'click', (ev) => @editPriority(ev, 'ignore')
+            $('#prioritize').on 'click', @editPriority
+            $('#ignorize').on 'click', @editPriority
 
 
-        editPriority: (ev, ty = 'parent') =>
-
-
-        newPriority: (ty, ev) =>
+        editPriority: (ev) =>
             ev.stopPropagation()
-            return if $('.edit-priority').length > 0
-            target = if ty == 'priority' then $('#priorities') else $('#ignorities')
-            target.append(edit_priorities_template({fur: ty}))
-            input = $('input.edit-priority-field', target)
 
-            maybeNewPrioritySave = (ev) =>
+            # Only allow one edit-priority at a time!
+            return if $('.edit-priority').length > 0
+
+            tg = $(ev.currentTarget)
+            ty = tg.data('ty')
+            pos = tg.data('pos')
+
+            # If the position is 'N', we're adding a new list item to
+            # the bottom of a list to be populated.
+
+            if pos == 'N'
+                @priorities.push({name: '', cat: ty})
+                pos = @priorities.length - 1
+                (if ty == 'priority' then $('#priorities') else $('#ignorities'))
+                    .append('<li class="priority" id="pos-' + pos + '"></li>')
+
+            # Replace the list item's contents with the editor's
+            # content.
+            li = $('#pos-' + pos)
+            li.html edit_priority_template
+                p:
+                    name: @priorities[pos].name
+                    pos: pos
+                type: ty
+
+            input = $('input.edit-priority-field', li)
+
+            maybePrioritySave = (ev) =>
                 prioritySave = =>
-                    @priorities.push({cat: ty, name: input.val()})
+                    @priorities[pos] = {cat: ty, name: input.val()}
                     @save()
 
                 code = if ev.keyCode then ev.keyCode else ev.which
                 return prioritySave() if code == 13
                 return @cleanAndRender() if code == 27
 
-            input.on 'keyup', maybeNewPrioritySave
-            $('.delete-priority-field', target).on 'click', @render
+            deletePriority = (ev) =>
+                ev.stopPropagation()
+                @priorities[pos].name = ""
+                @save()
+
+            input.on 'keyup', maybePrioritySave
+            $('.delete-priority-field', li).on 'click', deletePriority
             input.focus()
 
         save: ->
+            @clean()
             @repo.save {key: 'priorities', 'priorities': @priorities}, () =>
                 @render()
 
         clean: ->
-            @priorities = ({name: p.name, cat: p.cat} for p in @priorities when c.name.trim() != "")
-
-        cleanAndRender: ->
-            @clean()
-            @render()
+            @priorities = ({name: p.name, cat: p.cat} for p in @priorities when p.name.trim() != "")
 
         save: ->
+            @clean()
             @repo.save {key: 'priorities', 'priorities': @priorities}, =>
                 @render()
 
@@ -62,8 +85,9 @@ require ['jquery', 'priority_tmpl', 'lawnchair'], ($, priority_template) ->
                         r.push({name: @priorities[i].name, cat: @priorities[i].cat, pos: i})
                 r
 
-            $('#priorities').html(priority_template({priorities: priority_enumerate('priority')}))
-            $('#ignorities').html(priority_template({priorities: priority_enumerate('ignore')}))
+            $('#priorities').html(priority_template({priorities: priority_enumerate('priority'), type: 'priority'}))
+            $('#ignorities').html(priority_template({priorities: priority_enumerate('ignore'), type: 'ignore'}))
+            $('.priorityc').bind 'click', @editPriority
 
     $ ->
         prioritize = new Lawnchair {name: 'Prioritize'}, ->

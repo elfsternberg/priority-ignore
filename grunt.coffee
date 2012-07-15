@@ -81,7 +81,7 @@ module.exports = (grunt) ->
             appDir: "dist"
             baseUrl: "."
             paths:
-                jquery: "../libs/jquery/jquery-1.7.2"
+                jquery: "../assets/jquery/jquery-1.7.2"
             pragmas:
                 doExclude: true
             modules: [ name: "priority" ]
@@ -91,9 +91,10 @@ module.exports = (grunt) ->
 
         install:
             src: [
-                "libs/jquery/jquery-1.7.2.js"
-                "libs/require.js"
-                "libs/lawnchair/lawnchair.js"
+                "assets/jquery/jquery-1.7.2.js"
+                "assets/require.js"
+                "assets/lawnchair/lawnchair.js"
+                "assets/images/*.png"
             ]
             dest: "dist"
 
