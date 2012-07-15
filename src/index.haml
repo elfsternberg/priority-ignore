@@ -12,13 +12,15 @@
     %title Priority / Ignore
 
   %body
-    #content
-      #leftbrain.column
-        %h1.prioritize Today I Will Pay Attention To:
-        #priorities
-      #rightbrain.column
-        %h1.prioritize Today I Will Ignore:
-        #ignorities
+    #grid.container
+      .flow
+        .row-fluid
+          #leftbrain.span6
+            %h1#prioritize(data-for="0") Today I Will Pay Attention To:
+            #priorities
+          #rightbrain.span6
+            %h1#ignorize(data-for="0") Today I Will Ignore:
+            #ignorities
 
     #message(style="display:none")
       %h2 How to Use

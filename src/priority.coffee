@@ -2,47 +2,70 @@ require.config
     paths:
         'jquery': 'jquery-1.7.2'
 
-require ['jquery', 'priority_tmpl'], ($, priority_template) ->
+require ['jquery', 'priority_tmpl', 'lawnchair'], ($, priority_template) ->
 
     class Prioritize
 
-        constructor(@repo) ->
+        constructor: (@repo) ->
             @repo.get 'priorities', (p) =>
                 @priorities = if p? and p.priorities? then p.priorities else []
             @render()
 
             $('body').on 'click', @render
-            $('#thumbsup').on 'click', () => @newPriority('priority')
-            $('#thumbsdn').on 'click', () => @newPriority('ignore')
+            $('#prioritize').on 'click', (ev) => @editPriority(ev, 'priority')
+            $('#ignorize').on 'click', (ev) => @editPriority(ev, 'ignore')
+
+
+        editPriority: (ev, ty = 'parent') =>
+
+
+        newPriority: (ty, ev) =>
+            ev.stopPropagation()
+            return if $('.edit-priority').length > 0
+            target = if ty == 'priority' then $('#priorities') else $('#ignorities')
+            target.append(edit_priorities_template({fur: ty}))
+            input = $('input.edit-priority-field', target)
+
+            maybeNewPrioritySave = (ev) =>
+                prioritySave = =>
+                    @priorities.push({cat: ty, name: input.val()})
+                    @save()
+
+                code = if ev.keyCode then ev.keyCode else ev.which
+                return prioritySave() if code == 13
+                return @cleanAndRender() if code == 27
+
+            input.on 'keyup', maybeNewPrioritySave
+            $('.delete-priority-field', target).on 'click', @render
+            input.focus()
+
+        save: ->
+            @repo.save {key: 'priorities', 'priorities': @priorities}, () =>
+                @render()
+
+        clean: ->
+            @priorities = ({name: p.name, cat: p.cat} for p in @priorities when c.name.trim() != "")
+
+        cleanAndRender: ->
+            @clean()
+            @render()
 
         save: ->
             @repo.save {key: 'priorities', 'priorities': @priorities}, =>
                 @render()
 
         render: =>
-            priority_enumerate = (cat) ->
-                (c for c in @priorities if c.cat == cat)
+            priority_enumerate = (cat) =>
+                r = []
+                for i in [0...@priorities.length]
+                    if @priorities[i].cat == cat
+                        r.push({name: @priorities[i].name, cat: @priorities[i].cat, pos: i})
+                r
 
-            priority_render = (cat) ->
-                $('#priority_list').html(priority_template({priorities: priority_enumerate('priority')}))
-                $('#ignore_list').html(priority_template({priorities: priority_enumerate('ignore')}))
+            $('#priorities').html(priority_template({priorities: priority_enumerate('priority')}))
+            $('#ignorities').html(priority_template({priorities: priority_enumerate('ignore')}))
 
     $ ->
         prioritize = new Lawnchair {name: 'Prioritize'}, ->
-            p = this
-            p.save
-                key: 'priorities',
-                priorities: [
-                    {cat: 'priority', name: 'Omaha, Stormy, Raeney'}
-                    {cat: 'ignore', name: 'Politics'}
-                    {cat: 'priority', name: 'Spiral Genetics'}
-                    {cat: 'priority', name: 'Looking for Work'}
-                    {cat: 'priority', name: 'Writing'}
-                    {cat: 'priority', name: 'Productivity Core'}
-                    {cat: 'priority', name: 'Story Core'}
-                    {cat: 'ignore', name: 'Smut'}
-                    {cat: 'ignore', name: 'Religious Arguments'}
-                    {cat: 'ignore', name: 'PASWO'}
-                    {cat: 'ignore', name: 'Twitter'}
-                ], ->
-                handler = new Prioritize(p)
+            handler = new Prioritize(this)
+            handler.render()

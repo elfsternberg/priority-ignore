@@ -111,7 +111,7 @@ module.exports = function(grunt) {
       findNestedDependencies: true
     },
     install: {
-      src: ["src/index.html", "src/priority.js", "src/*_tmpl.js", "src/style.css", "libs/jquery/jquery-1.7.2.js", "libs/require.js"],
+      src: ["libs/jquery/jquery-1.7.2.js", "libs/require.js", "libs/lawnchair/lawnchair.js"],
       dest: "dist"
     },
     mocha: {
@@ -119,7 +119,7 @@ module.exports = function(grunt) {
     },
     uglify: {}
   });
-  grunt.registerTask("default", "coffee:dev recess:dev haml:dev hamltojs:dev");
+  grunt.registerTask("default", "coffee:dev recess:dev haml:dev hamltojs:dev install");
   grunt.registerHelper("haml", function(src, dest, done) {
     var args;
     args = {
@@ -149,7 +149,7 @@ module.exports = function(grunt) {
     var file, out;
     file = grunt.file.read(src);
     out = path.basename(src, ".html");
-    grunt.file.write(path.join(dest, out + ".js"), "define(" + _und.template(file).source + ");");
+    grunt.file.write(path.join(dest, out + ".js"), "define(function() { return " + _und.template(result.stdout).source + "});");
     return done();
   });
   grunt.registerMultiTask("templatize", "Compile Underscored HTML to Javascript", function() {
@@ -176,7 +176,7 @@ module.exports = function(grunt) {
         console.log(err);
       }
       out = path.basename(src, ".haml");
-      grunt.file.write(path.join(dest, out + ".js"), "define(" + _und.template(result.stdout).source + ");");
+      grunt.file.write(path.join(dest, out + ".js"), "define(function() { return " + _und.template(result.stdout).source + "});");
       return done();
     });
   });
