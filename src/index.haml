@@ -4,6 +4,7 @@
     %meta{:content => "text/html; charset=utf-8", "http-equiv" => "Content-Type"}/
     %meta{:name => "keywords", :content => ""}/
     %meta{:name => "description", :content => ""}/
+    %link{:rel => "stylesheet", :href => "http://fonts.googleapis.com/css?family=Montserrat", :type => "text/css"}/
     %link{:rel => "stylesheet", :href => "style.css", :type => "text/css"}/
     %link{:rel => "shortcut icon", :type => "image/x-icon", :href => "images/favicon.ico"}/
     %link{:rel => "shortcut icon", :type => "image/png", :href => "images/favicon.png"}/
@@ -12,28 +13,12 @@
 
   %body
     #content
-      #leftbrain
-        %h1#prioritize Today I Will Pay Attention To:
+      #leftbrain.column
+        %h1.prioritize Today I Will Pay Attention To:
         #priorities
-      #rightbrain
-        %h1#prioritize Today I Will Ignore:
+      #rightbrain.column
+        %h1.prioritize Today I Will Ignore:
         #ignorities
-
-      #braindiv
-        #img
-        #msg
-          Right now, it&rsquo;s <span id="thetime"></span>.
-          %p Is <strong>this</strong></p>
-          %p what you want</p>
-          %p to be <strong class="doing">doing</strong>
-          %p right now?
-      .clearoncolumn
-      #rightnow
-        #newcat
-          %h1 Wouldn't you <strong>rather</strong> be: 
-          <button class="fadebutton" id="addcat" style="display: none">+ New Category</button>
-        .div(style="clear:both")
-        #todos
 
     #message(style="display:none")
       %h2 How to Use
