@@ -12,6 +12,10 @@
     %title Priority / Ignore
 
   %body
+    #gear
+      #gearbutton
+        %img(src="gear.png")
+
     #grid.container
       .flow
         .row-fluid
@@ -22,33 +26,30 @@
             %h1#ignorize(data-pos="N" data-ty="ignore") Today I Will Ignore:
             #ignorities
 
-    #message(style="display:none")
-      %h2 How to Use
-      %p
+    #message.modal.hide.fade
+      .modal-header
+        %button.close(data-dismiss="modal" type="button") ×
+        %h3 Prioritize / Ignore
+        %p
+          According to the Harvard School of Business, there are <a
+          href="http://blogs.hbr.org/bregman/2009/05/two-lists-you-should-look-at-e.html">two
+          lists</a> you should look at every morning, and perhaps
+          every chance you get: the list of things that are important
+          to you, and the list of things that you should ignore.  
 
-        <b>Priority / Ignore</b> is a simple project reminder. It is
-        not a to-do list or project manager.  It's just a
-        <i>reminder</i>.  After <a
-        href="https://github.com/elfsternberg/rightnow">downloading
-        and installing <b>Priority / Ignore!</b> locally</a>, set the
-        index.html file as your home page, open a new tab and click on
-        either header.
+        %p 
+          Prioritize / Ignore is an extension of that idea: a
+          reminder, each and every time you open your browser, of what
+          is important, and what is not.  
 
-      %p
+        %p 
+          To use: Just click on either header.  A new entry will open
+          up in that list for you to fill out.  Empty entries will be
+          deleted automatically.
 
-        The idea is simple: every time you open your browser or click
-        "New Tab," you'll get the <b>Priority / Ignore</b> page.
-        Every day we should remind ourselves not only of what must be
-        done, but what we must put aside as trivial and distracting.  
-        
-      %p 
-        All the data is stored locally using the browser's own local
-        storage mechanism.  There is no server, and no data is ever
-        sent anywhere.  Everything on your screen is yours, kept as
-        secure as you keep your physical hardware.
-
-      %p 
-        This message will disappear as soon as you've created your
-        first entry.  You can also <button id="preclose">Close it
-        now.</button>  
- 
+        %p
+          You can click on the gear icon in the lower
+          left-hand corner any time you like to review this page.
+      .model-body
+      .model-footer
+        %a.btn(href="#" data-dismiss="modal") Close

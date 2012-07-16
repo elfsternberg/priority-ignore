@@ -56,6 +56,8 @@ input[type="search"]::-webkit-search-cancel-button {
 
 
 body {
+    margin: 0;
+    padding: 0;
     font: 13pt/190% Montserrat,Calibri,Georgia,"Lucida Bright",Lucidabright,"Bitstream Vera Serif",serif;
     background-color: #fff;
 }
@@ -517,43 +519,22 @@ ul + p {
     margin-left: 10px;
 }
 
-#newcat h1, div.category, .editcat, .addstory, li.task {
+#newcat h1, div.category, .editcat, .addstory, li.priority {
     cursor: pointer;
 }
 
+.edit-category, .edit-priority {
 
-.edit-category, .edit-task {
-    padding: 4px 2px 0px 5px;  
-    text-shadow: 0px 1px 0px #fff;  
-    -webkit-border-radius: 20px;  
-    -moz-border-radius: 20px;  
-    border-radius: 20px;  
-    border: 1px solid #ddd;
+    .edit-priority-field {
+        margin-top: 8px;
+    }
 
-    -webkit-box-shadow: 2px 1px 0px #efefef;  
-    -moz-box-shadow: 2px 1px 0px #efefef;  
-    box-shadow:  2px 1px 0px #efefef;  
-
-    width: 80%;
-    input.edit-task-field {
-        width: 80%;
-        border: 1px solid #eee;
-        padding-bottom: 0;
-        margin-bottom: 0;
-        margin-left: 5px;
-        -webkit-border-radius: 20px;  
-        -moz-border-radius: 20px;  
-        border-radius: 20px;  
-    }   
-
-    button.delete-task-field {
-        margin-top: 4px;
-        padding: 1px 4px 3px 3px;
+    .delete-priority-field {
+        padding: 0px 4px 3px 3px;
         font-weight: bold;
-        display: block;
-        float: right;
-        margin-right: 10px;
+        display: inline-block;
         background-color: #ff9f00;
+        vertical-align: middle;
         color: #333;
         -webkit-border-radius: 20px;  
         -moz-border-radius: 20px;  
@@ -563,16 +544,248 @@ ul + p {
 
 #message {
     font-family: Constantina,Georgia,"Lucida Bright",Lucidabright,"Bitstream Vera Serif",serif;
-    display: block;
-    position:absolute;
-    top: 1.0416666%;
-    right: 1.0416666%;
-    width: 35.0416666%;
-    max-width: 32em;
-    padding: 1.0416666%;
-    background:#eee;
-    border:1px solid #ddd;
-    -webkit-border-radius: 20px;  
-    -moz-border-radius: 20px;  
-    border-radius: 20px;  
 }
+
+#gear {
+    position: fixed;
+    bottom: 0px;
+    height: 20px;
+    width: 100%;
+}
+
+#gearbutton {
+    position: relative;
+    -webkit-border-top-left-radius: 2px; 
+        -moz-border-radius-top-left: 2px; 
+            border-top-left-radius: 2px; 
+    float: right;
+    margin-right: 0px;
+    background-color: black;
+    height: 20px;
+    img {
+        vertical-align: top;
+        padding: 2px 2px 0px 2px;
+    }
+}
+
+@zindexDropdown:          1000;
+@zindexPopover:           1010;
+@zindexTooltip:           1020;
+@zindexFixedNavbar:       1030;
+@zindexModalBackdrop:     1040;
+@zindexModal:             1050;
+
+// Opacity
+.opacity(@opacity) {
+  opacity: @opacity / 100;
+  filter: ~"alpha(opacity=@{opacity})";
+}
+
+.background-clip(@clip) {
+  -webkit-background-clip: @clip;
+     -moz-background-clip: @clip;
+          background-clip: @clip;
+}
+
+.modal-open {
+  .dropdown-menu {  z-index: @zindexDropdown + @zindexModal; }
+  .dropdown.open { *z-index: @zindexDropdown + @zindexModal; }
+  .popover       {  z-index: @zindexPopover  + @zindexModal; }
+  .tooltip       {  z-index: @zindexTooltip  + @zindexModal; }
+}
+
+// Background
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: @zindexModalBackdrop;
+  background-color: black;
+  // Fade for backdrop
+  &.fade { opacity: 0; }
+}
+
+.modal-backdrop,
+.modal-backdrop.fade.in {
+  .opacity(80);
+}
+
+#gradient {
+  .vertical(@startColor: #555, @endColor: #333) {
+    background-color: mix(@startColor, @endColor, 60%);
+    background-image: -moz-linear-gradient(top, @startColor, @endColor); // FF 3.6+
+    background-image: -ms-linear-gradient(top, @startColor, @endColor); // IE10
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@startColor), to(@endColor)); // Safari 4+, Chrome 2+
+    background-image: -webkit-linear-gradient(top, @startColor, @endColor); // Safari 5.1+, Chrome 10+
+    background-image: -o-linear-gradient(top, @startColor, @endColor); // Opera 11.10
+    background-image: linear-gradient(top, @startColor, @endColor); // The standard
+    background-repeat: repeat-x;
+  }
+}
+
+.buttonBackground(@startColor, @endColor) {
+  // gradientBar will set the background to a pleasing blend of these, to support IE<=9
+  .gradientBar(@startColor, @endColor);
+  *background-color: @endColor; /* Darken IE7 buttons by default so they stand out more given they won't have borders */
+
+  // in these cases the gradient won't cover the background, so we override
+  &:hover, &:active, &.active, &.disabled, &[disabled] {
+    background-color: @endColor;
+    *background-color: darken(@endColor, 5%);
+  }
+
+  // IE 7 + 8 can't handle box-shadow to show active, so we darken a bit ourselves
+  &:active,
+  &.active {
+    background-color: darken(@endColor, 10%) e("\9");
+  }
+}
+
+
+.gradientBar(@primaryColor, @secondaryColor) {
+  #gradient > .vertical(@primaryColor, @secondaryColor);
+  border-color: @secondaryColor @secondaryColor darken(@secondaryColor, 15%);
+  border-color: rgba(0,0,0,.1) rgba(0,0,0,.1) fadein(rgba(0,0,0,.1), 15%);
+}
+
+@btnBackground:                     #fff;
+@btnBackgroundHighlight:            darken(#fff, 10%);
+@btnBorder:                         #ccc;
+
+.btn {
+  display: inline-block;
+  padding: 4px 10px 4px;
+  margin-bottom: 0; // For input.btn
+  font-size: @baseFontSize;
+  line-height: @baseLineHeight;
+  *line-height: 20px;
+  color: #333;
+  text-align: center;
+  text-shadow: 0 1px 1px rgba(255,255,255,.75);
+  vertical-align: middle;
+  cursor: pointer;
+  .buttonBackground(@btnBackground, @btnBackgroundHighlight);
+  border: 1px solid @btnBorder;
+  *border: 0; // Remove the border to prevent IE7's black border on input:focus
+  border-bottom-color: darken(@btnBorder, 10%);
+  .border-radius(4px);
+  .box-shadow(~"inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05)");
+}
+
+// Hover state
+.btn:hover {
+  color: #333;
+  text-decoration: none;
+  background-color: darken(white, 10%);
+  *background-color: darken(white, 15%); /* Buttons in IE7 don't get borders, so darken on hover */
+  background-position: 0 -15px;
+
+  // transition is only when going to hover, otherwise the background
+  // behind the gradient (there for IE<=9 fallback) gets mismatched
+  .transition(background-position .1s linear);
+}
+
+// Focus state for keyboard and accessibility
+.btn:focus {
+  .tab-focus();
+}
+
+.tab-focus() {
+  // Default
+  outline: thin dotted #333;
+  // Webkit
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+// Active state
+.btn.active,
+.btn:active {
+  background-color: darken(#fff, 10%);
+  background-color: darken(#fff, 15%) e("\9");
+  background-image: none;
+  outline: 0;
+  .box-shadow(~"inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05)");
+}
+// Disabled state
+.btn.disabled,
+.btn[disabled] {
+  cursor: default;
+  background-color: darken(#fff, 10%);
+  background-image: none;
+  .opacity(65);
+  .box-shadow(none);
+}
+
+// Base modal
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: @zindexModal;
+  overflow: auto;
+  width: 560px;
+  margin: -250px 0 0 -280px;
+  background-color: white;
+  border: 1px solid #999;
+  border: 1px solid rgba(0,0,0,.3);
+  *border: 1px solid #999; /* IE6-7 */
+  .border-radius(6px);
+  .box-shadow(0 3px 7px rgba(0,0,0,0.3));
+  .background-clip(padding-box);
+  &.fade {
+    .transition(e('opacity .3s linear, top .3s ease-out'));
+    top: -25%;
+  }
+  &.fade.in { top: 50%; }
+}
+.modal-header {
+  padding: 9px 15px;
+  border-bottom: 1px solid #eee;
+  // Close icon
+  .close { margin-top: 2px; float: left }
+}
+
+// Body (where all modal content resides)
+.modal-body {
+  overflow-y: auto;
+  max-height: 400px;
+  padding: 15px;
+}
+// Remove bottom margin if need be
+.modal-form {
+  margin-bottom: 0;
+}
+
+// Footer (for actions)
+.modal-footer {
+  padding: 14px 15px 15px;
+  margin-bottom: 0;
+  text-align: right; // right align buttons
+  background-color: #f5f5f5;
+  border-top: 1px solid #ddd;
+  .border-radius(0 0 6px 6px);
+  .box-shadow(inset 0 1px 0 white);
+  .clearfix(); // clear it in case folks use .pull-* classes on buttons
+
+  // Properly space out buttons
+  .btn + .btn {
+    margin-left: 5px;
+    margin-bottom: 0; // account for input[type="submit"] which gets the bottom margin like all other inputs
+  }
+  // but override that for button groups
+  .btn-group .btn + .btn {
+    margin-left: -1px;
+  }
+}
+    
+.hide {
+  display: none;
+}
+.show {
+  display: block;
+}
+
+

@@ -94,6 +94,7 @@ module.exports = (grunt) ->
                 "assets/jquery/jquery-1.7.2.js"
                 "assets/require.js"
                 "assets/lawnchair/lawnchair.js"
+                "assets/jquery/bootstrap-modal.js"
                 "assets/images/*.png"
             ]
             dest: "dist"

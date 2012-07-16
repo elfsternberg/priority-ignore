@@ -111,7 +111,7 @@ module.exports = function(grunt) {
       findNestedDependencies: true
     },
     install: {
-      src: ["assets/jquery/jquery-1.7.2.js", "assets/require.js", "assets/lawnchair/lawnchair.js", "assets/images/*.png"],
+      src: ["assets/jquery/jquery-1.7.2.js", "assets/require.js", "assets/lawnchair/lawnchair.js", "assets/jquery/bootstrap-modal.js", "assets/images/*.png"],
       dest: "dist"
     },
     mocha: {
