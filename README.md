@@ -19,7 +19,14 @@ else, and every browser will have its own local store.  If you use
 more than one browser, this may present a problem, but most people
 have one browser per device, and these lists shouldn't be that long.
 
-This is mostly a tech demo for various JS tools.
+This is mostly a tech demo for various JS tools.  It is probably one
+of the cleanest framework for developing webapps I've ever written,
+and is likely to be the template I use for developing for the next
+year: Grunt, Mocha, Zombie, Coffee, Haml, Less.  
+
+There's an Easter Egg in the code.  After installing, try typing in
+"Defeat the Empire" or "Master the Force" as priorities and see what
+happens.
 
 ## License
 Copyright (c) 2012 Elf M. Sternberg  
