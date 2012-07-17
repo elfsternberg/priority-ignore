@@ -64,10 +64,16 @@ require ['jquery',  'lawnchair'], ($) ->
                 $('.delete-priority-field', li).on 'click', deletePriority
                 input.focus()
 
-            save: ->
-                @clean()
-                @repo.save {key: 'priorities', 'priorities': @priorities}, () =>
-                    @render()
+            easter: ->
+                force_re = new RegExp('(Force|Empire|Vader|Darth|Sith|Jedi|rebel)')
+                force = (1 for p in @priorities when force_re.test(p.name))
+                if force.length > 0
+                    console.log("Aroo?")
+                    $('#prioritize').css('background-image', 'url(rebel.png)')
+                    $('#ignorize').css('background-image', 'url(imperial.png)')
+                else
+                    $('#prioritize').css('background-image', 'url(thumbsup.png)')
+                    $('#ignorize').css('background-image', 'url(thumbsdown.png)')
 
             clean: ->
                 @priorities = ({name: p.name, cat: p.cat} for p in @priorities when p.name.trim() != "")
@@ -78,6 +84,7 @@ require ['jquery',  'lawnchair'], ($) ->
                     @render()
 
             render: =>
+                @easter()
                 priority_enumerate = (cat) =>
                     r = []
                     for i in [0...@priorities.length]
