@@ -65,10 +65,9 @@ require ['jquery',  'lawnchair'], ($) ->
                 input.focus()
 
             easter: ->
-                force_re = new RegExp('(Force|Empire|Vader|Darth|Sith|Jedi|rebel)')
+                force_re = new RegExp('(Force|Empire|Vader|Darth|Sith|Jedi|Rebel)')
                 force = (1 for p in @priorities when force_re.test(p.name))
                 if force.length > 0
-                    console.log("Aroo?")
                     $('#prioritize').css('background-image', 'url(rebel.png)')
                     $('#ignorize').css('background-image', 'url(imperial.png)')
                 else
